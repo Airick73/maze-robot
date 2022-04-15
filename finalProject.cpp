@@ -1,109 +1,148 @@
-/* C++ program to solve Rat in
-a Maze problem using backtracking */
-#include <stdio.h>
-
-// Maze size
-#define N 4
-
-bool solveMazeUtil(int maze[N][N], int x, int y, int sol[N][N]);
-
-/* A utility function to print
-solution matrix sol[N][N] */
-void printSolution(int sol[N][N]){
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++)
-			printf(" %d ", sol[i][j]);
-		printf("\n");
-	}
+#include <iostream>
+using namespace std;
+#define SIZE 5
+//the maze problem
+int maze[SIZE][SIZE] = {
+   {0,0,0,0,0},
+   {0,0,0,0,0},
+   {0,0,0,0,0},
+   {0,0,0,1,1},
+   {0,0,0,0,0}
+};
+//matrix to store the solution
+int solution[SIZE][SIZE];
+//function to print the solution matrix
+void printsolution() {
+   int i,j;
+   for(i=0;i<SIZE;i++) {
+      for(j=0;j<SIZE;j++) {
+         printf("%d\t",solution[i][j]);
+      }
+      printf("\n\n");
+   }
+}
+//function to solve the maze
+//using backtracking
+int solvemaze(int r, int c) {
+   //if destination is reached, maze is solved
+   //destination is the last cell(maze[SIZE-1][SIZE-1])
+   if((r==0) && (c==4)) {  //set destination here
+      solution[r][c] = 1;
+      return 1;
+   }
+   //checking if we can visit in this cell or not
+   //the indices of the cell must be in (0,SIZE-1)
+   //and solution[r][c] == 0 is making sure that the cell is not already visited
+   //maze[r][c] == 0 is making sure that the cell is not blocked
+   if(r>=0 && c>=0 && r<SIZE && c<SIZE && solution[r][c] == 0 && maze[r][c] == 0){
+      //if safe to visit then visit the cell
+      solution[r][c] = 1;
+      //going down
+      if(solvemaze(r+1, c)) 
+         return 1;
+      //going right
+      if(solvemaze(r, c+1))
+         return 1;
+      //going up
+      if(solvemaze(r-1, c)) 
+         return 1;
+      //going left 
+      if(solvemaze(r, c-1)) 
+         return 1;
+      //backtracking
+      solution[r][c] = 0;
+      return 0;
+   }
+   return 0;
+}
+int main() {
+   //making all elements of the solution matrix 0
+   int i,j;
+   for(i=0; i<SIZE; i++) {
+      for(j=0; j<SIZE; j++) {
+         solution[i][j] = 0;
+      }
+   }
+   if (solvemaze(4,0)) // input robot starting destination 
+      printsolution();
+   else
+      printf("No solution\n");
+   return 0;
 }
 
-/* A utility function to check if x,
-y is valid index for N*N maze */
-bool isSafe(int maze[N][N], int x, int y){
-	// if (x, y outside maze) return false
-	if (x >= 0 && x < N && y >= 0 && y < N && maze[x][y] == 1)
-		return true;
 
-	return false;
-}
 
-/* This function solves the Maze problem
-using Backtracking. It mainly uses
-solveMazeUtil() to solve the problem.
-It returns false if no path is possible,
-otherwise return true and prints the path
-in the form of 1s. Please note that there
-may be more than one solutions, this
-function prints one of the feasible
-solutions.*/
-bool solveMaze(int maze[N][N]){
-	int sol[N][N] = { { 0, 0, 0, 0 },
-					  { 0, 0, 0, 0 },
-					  { 0, 0, 0, 0 },
-					  { 0, 0, 0, 0 } };
 
-	if (solveMazeUtil(maze, 2, 0, sol) == false) {
-		printf("Solution doesn't exist");
-		return false;
-	}
-	printSolution(sol);
-	return true;
-}
 
-/* A recursive utility function
-to solve Maze problem */
-bool solveMazeUtil(int maze[N][N], int x,int y, int sol[N][N]){
-	// if (x, y is goal) return true
-	if (x == N - 1 && y == N - 1 && maze[x][y] == 1) {
-		sol[x][y] = 1;
-		return true;
-	}
 
-	// Check if maze[x][y] is valid
-	if (isSafe(maze, x, y) == true) {
-		// Check if the current block is already part of solution path.
-		if (sol[x][y] == 1)
-			return false;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// #include <stdio.h>
+
+// struct cell{
+// 	int ob;
+// 	int xCord;
+// 	int yCord;
+// };
+
+// int main()
+// {
+// 	int dimX = 5, dimY = 5; //dimensions of the board
+// 	int ob; //obstiacle 
+// 	//target has corrdinates xt, yt
+// 	int goalX = 0, goalY = 4; //goal is set to top right
+// 	int robotX = 4, robotY = 0; //robot is set to bottom left
+// 	int goalReached = 0;
+// 						//x =  0, 1, 2, 3, 4
+// 	int maze[dimX][dimY] = { { 0, 0, 0, 0, 0 },  //y = 0
+// 					         { 0, 0, 0, 0, 0 },  //y = 1
+// 					         { 0, 0, 0, 0, 0 },  //y = 2
+// 					         { 0, 0, 0, 0, 0 },  //y = 3
+// 							 { 0, 0, 0, 0, 0 }}; //y = 4
+// 	maze[goalX][goalY] = 3;
+
+// 	int mazeSol[dimX][dimY]; // matrix to store the solution 
+
+// 	//loop to find destination in top right
+// 	//while(goal is not reached){
+// 	//	try to move down  // x 
+// 	//	try to move left
+// 	//	try to move right
+// 	//	try to move up
+// 	// 	at each move check to see if the move is valid (inside the board and does not move into wall)
+// 	// 	if it is valid make the move and check if the goal is reached
+// 	//}
+
+// 	while(goalReached == 0){
+// 		if(maze[robotX][robotY])
+// 	}
+
+
+
+
+
+
 	
-		// mark x, y as part of solution path
-		sol[x][y] = 1;
-
-		/* Move right in x direction */
-		if (solveMazeUtil(maze, x + 1, y, sol) == true)
-			return true;
-
-		/* If moving in x direction
-		doesn't give solution then
-		Move down in y direction */
-		if (solveMazeUtil(maze, x, y + 1, sol) == true)
-			return true;
-
-		/* Move left in x direction */
-		if (solveMazeUtil(maze, x - 1, y, sol) == true)
-			return true;
-
-		/* Move up in y direction */
-		if (solveMazeUtil(maze, x, y - 1, sol) == true)
-			return true;
-	
-		/* If none of the above movements
-		work then BACKTRACK: unmark
-		x, y as part of solution path */
-		sol[x][y] = 0;
-		return false;
-	}
-
-	return false;
-}
-
-// driver program to test above function
-int main()
-{
-	int maze[N][N] = { { 1, 0, 1, 0 },
-					   { 0, 1, 1, 1 },
-					   { 0, 1, 0, 0 },
-					   { 1, 1, 1, 1 } };
-
-	solveMaze(maze);
-	return 0;
-}
+// 	return 0;
+// }
