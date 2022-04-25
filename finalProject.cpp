@@ -31,6 +31,7 @@ int main() {
    int move_made;         //flag to check if move made
    int lastMove;           //flag to check what the last move was 
    char movesMade[50];     //char array to store moves mades
+   int moveSequences[50][2]; 
    int index = 0;          //index iterator for char array moves made
    int backtrackCount = 0;    //varaible to keep track of number of times backtracked
    int noSolution = 0;           //flag to check if no solution possible
@@ -42,17 +43,21 @@ int main() {
          //going right
          if(c + 1 >= 0 && c + 1 < dimX && solution[r][c+1] == 0 && maze[r][c+1] == 0 && move_made == 0){
             c = c + 1;
-            //movesMade.push_back('R');
             movesMade[index] = 'R';
+            moveSequences[index][0] = r;
+            moveSequences[index][1] = c;
             index++;
             move_made = 1;
             lastMove = 0;
             backtrackCount = 0;
          }
+
          //going up
          if(r - 1 >= 0 && r - 1<dimY && solution[r-1][c] == 0 && maze[r-1][c] == 0 && move_made == 0){
             r = r - 1;
             movesMade[index] = 'U';
+            moveSequences[index][0] = r;
+            moveSequences[index][1] = c;
             index++;
             move_made = 1;
             lastMove = 1;
@@ -63,6 +68,8 @@ int main() {
          if(r+1 >= 0 && r + 1 < dimY && solution[r+1][c] == 0 && maze[r+1][c] == 0 && move_made == 0){ 
             r = r + 1;
             movesMade[index] = 'D';
+            moveSequences[index][0] = r;
+            moveSequences[index][1] = c;
             index++;
             move_made = 1;
             lastMove = 2;
@@ -73,6 +80,8 @@ int main() {
          if(c - 1 >=0 && c - 1<dimX && solution[r][c-1] == 0 && maze[r][c-1] == 0 && move_made == 0){
             c = c - 1;
             movesMade[index] = 'L';
+            moveSequences[index][0] = r;
+            moveSequences[index][1] = c;
             index++;
             move_made = 1;
             lastMove = 3;
@@ -133,6 +142,11 @@ int main() {
       printf("\n\n");
       }
 
+      for(int i = 0; i < index; i++){
+            cout << "[" << moveSequences[i][0] << "," << moveSequences[i][1] << "]";
+      }
+      cout << "\n";
+      
       for(int i = 0; i < index; i++){
          cout << movesMade[i];
       }
