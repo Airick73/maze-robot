@@ -1,11 +1,8 @@
 #include <iostream>
-using namespace std;
 #include <vector>
+using namespace std;
 #define dimX 5
 #define dimY 5
-//the maze problem
-
-
 
 int main() {
    //initializing maze potentially having obstacles
@@ -16,8 +13,8 @@ int main() {
       }
    }
    //intializing obstacles
-   maze[3][3] = 1;
-   maze[3][4] = 1;
+   maze[0][3] = 1;
+   maze[2][4] = 1;
 
    //intializing solution maze ... the robot references the maze and will mark down its path in this solution maze
    int solution[dimX][dimY];
@@ -30,7 +27,6 @@ int main() {
    int r = 4, c = 0; //set starting point
    int move_made;         //flag to check if move made
    int lastMove;           //flag to check what the last move was 
-   char movesMade[50];     //char array to store moves mades
    int moveSequences[50][2]; 
    int index = 0;          //index iterator for char array moves made
    int backtrackCount = 0;    //varaible to keep track of number of times backtracked
@@ -43,7 +39,6 @@ int main() {
          //going right
          if(c + 1 >= 0 && c + 1 < dimX && solution[r][c+1] == 0 && maze[r][c+1] == 0 && move_made == 0){
             c = c + 1;
-            movesMade[index] = 'R';
             moveSequences[index][0] = r;
             moveSequences[index][1] = c;
             index++;
@@ -55,7 +50,6 @@ int main() {
          //going up
          if(r - 1 >= 0 && r - 1<dimY && solution[r-1][c] == 0 && maze[r-1][c] == 0 && move_made == 0){
             r = r - 1;
-            movesMade[index] = 'U';
             moveSequences[index][0] = r;
             moveSequences[index][1] = c;
             index++;
@@ -67,7 +61,6 @@ int main() {
          //going down
          if(r+1 >= 0 && r + 1 < dimY && solution[r+1][c] == 0 && maze[r+1][c] == 0 && move_made == 0){ 
             r = r + 1;
-            movesMade[index] = 'D';
             moveSequences[index][0] = r;
             moveSequences[index][1] = c;
             index++;
@@ -79,7 +72,6 @@ int main() {
          //going left 
          if(c - 1 >=0 && c - 1<dimX && solution[r][c-1] == 0 && maze[r][c-1] == 0 && move_made == 0){
             c = c - 1;
-            movesMade[index] = 'L';
             moveSequences[index][0] = r;
             moveSequences[index][1] = c;
             index++;
@@ -92,27 +84,19 @@ int main() {
          if(move_made == 0){                //move_made == 0 indicates that during an iteration of the while loop no move could be made
             maze[r][c] = 1;            //mark that position which no move could be made as an obstacle
             if(lastMove == 0){         //series of if else statments to see what the last move was made
-               c = c - 1;              //once the last move made is determined it will reverse that move, backing out of the position it was stuck in                 
-               movesMade[index] = '_';  //after that it will make another move and will not go back to the place it was trapped as it now sees it as an obstacle, popping its last move
-               index++;
+               c = c - 1;              //once the last move made is determined it will reverse that move, backing out of the position it was stuck in     
                backtrackCount++;       //count number of times back tracked so that we can determine if there is no solution
-            }                          
+            }                             ////after that it will make another move and will not go back to the place it was trapped as it now sees it as an obstacle, popping its last move
             else if(lastMove == 1){    
                r = r + 1;
-               movesMade[index] = '_';
-               index++;
                backtrackCount++;
             }
             else if(lastMove == 2){
                r = r - 1;
-               movesMade[index] = '_';
-               index++;
                backtrackCount++;
             }
             else if(lastMove == 3){
                c = c + 1;
-               movesMade[index] = '_';
-               index++;
                backtrackCount++;
             }
             else{
@@ -146,21 +130,10 @@ int main() {
             cout << "[" << moveSequences[i][0] << "," << moveSequences[i][1] << "]";
       }
       cout << "\n";
+      cout << "Number of moves made: " << index;
       
-      for(int i = 0; i < index; i++){
-         cout << movesMade[i];
-      }
    }
-   
-   
+
    return 0;
 
 }
-
-
-
-
-
-
-
-
